@@ -1,4 +1,10 @@
-# PFE-2026-2-Grupo-4-react
+# PFE-2026-2-Grupo-4-react-semAgendamento
+
+Integrantes: Arthur Alves, Matheus Borges, Guilherme Buttignol, Igor Santos, Lucas Cunha e Caio Santos.
+
+## Link Vercel
+
+
 
 ## Executar localmente
 
