@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Sem <link rel="icon"> aqui: cada página coloca o próprio favicon
+         (halter no Hub e na Fisioterapia, foguete na PKZ, "TO" no One to One).
+         Se tivesse um aqui também, o navegador ficaria com dois e poderia
+         escolher o errado. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Cor da barra do navegador no celular (o hook useTema troca junto com o tema) -->
+    <meta name="theme-color" content="#0b0b0b" />
+    <title>PKZ · One to One | Treino de alta performance</title>
+
+    <!-- Único HTML do projeto React: as "páginas" são componentes -->
+    <!-- Google Fonts: Archivo (títulos), Oswald (condensada) e DM Sans (texto),
+         as mesmas nas 3 páginas; display=swap = boa prática -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=DM+Sans:wght@400;500&family=Oswald:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome (ícones de redes sociais, contato e selos), versão gratuita via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Tema antes da primeira pintura: o React só roda depois que a página
+         carrega, então sem este script quem usa o tema claro veria um "flash"
+         do tema escuro. Usa a mesma chave ("tema") do hook useTema. -->
+    <script>
+      (function () {
+        try {
+          var modo = localStorage.getItem("tema") || "system";
+          var tema = modo;
+          if (modo === "system") {
+            var sistemaEscuro = matchMedia("(prefers-color-scheme: dark)").matches;
+            tema = sistemaEscuro ? "dark" : "light";
+          }
+          document.documentElement.dataset.theme = tema;
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute("content", tema === "light" ? "#f6f5f1" : "#0b0b0b");
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

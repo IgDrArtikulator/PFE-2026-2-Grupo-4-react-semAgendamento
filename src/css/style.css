@@ -1,0 +1,2298 @@
+/* =====================================================================
+   0. CONFIGURAÇÕES GLOBAIS
+   Variáveis, reset, tipografia, botões, campos de formulário,
+   cards, placeholders, header (nav) e footer (nav).
+   ===================================================================== */
+
+/* ---------- 0.1 Variáveis (cores, fontes e medidas do design) ---------- */
+:root {
+  /* Cores One to One */
+  --cor-fundo: #0b0b0b;          /* fundo de todas as páginas */
+  --cor-superficie: #111111;     /* fundo de inputs e cards */
+  --cor-placeholder: #161616;    /* caixas de foto/vídeo ainda vazias */
+  --cor-borda: #242424;          /* bordas finas de cards e inputs */
+  --cor-texto: #ffffff;          /* títulos */
+  --cor-texto-suave: #cfcfcf;    /* parágrafos */
+  --cor-texto-apagado: #8a8a8a;  /* placeholders e legendas */
+  --cor-azul: #8ed3e6;           /* azul One to One (destaques e botões) */
+  --cor-azul-escuro: #0e1b22;    /* fundos em azul escuro */
+  --cor-azul-borda: #1f4555;     /* bordas em azul */
+
+  /* Cores que antes estavam fixas no meio do CSS. Viraram variáveis para
+     o tema claro poder trocar todas de uma vez (seção 9). */
+  --cor-linha: #1d1d1d;              /* linhas do header e do footer */
+  --cor-linha-forte: #2a2a2a;        /* bordas de botões */
+  --cor-sobre-destaque: #0b0b0b;     /* texto em cima do azul (botões) */
+  --cor-destaque-hover: #a8e0ee;     /* botão azul com o mouse em cima */
+  --cor-texto-medio: #a8a8a8;        /* textos de apoio dos Planos */
+
+  /* Tema escuro é o padrão do site: o navegador também pinta barras de
+     rolagem e campos de formulário no modo escuro */
+  color-scheme: dark;
+
+  /* Fontes (carregadas pelo Google Fonts no <head> de cada página) */
+  --fonte-titulo: "Archivo", Arial, sans-serif;               /* títulos pesados */
+  --fonte-condensada: "Oswald", "Arial Narrow", sans-serif;   /* eyebrows e botões */
+  --fonte-texto: "DM Sans", Arial, sans-serif;                /* parágrafos */
+
+  /* Medidas */
+  --espaco-lateral: 24px;       /* margem mínima esquerda/direita (celular) */
+  --largura-conteudo: 1680px;   /* largura máxima do conteúdo (só em telas enormes) */
+
+  /* Margem lateral de header, seções e footer: 6% da largura da tela (6vw),
+     então cresce junto com a tela e fica proporcional em qualquer monitor.
+     max() escolhe o maior dos valores: nunca menos que 24px e, em telas
+     enormes, o conteúdo para de crescer em 1680px. */
+  --margem: max(var(--espaco-lateral), 6vw, calc((100% - var(--largura-conteudo)) / 2));
+
+  /* Escala extra só dos títulos e subtítulos (títulos de seção, do Hub,
+     dos cards, legenda da galeria...). Multiplica por cima da escala do
+     site (font-size do html, seção 0.2): 0.8 = títulos 20% menores. */
+  --escala-titulos: 0.8;
+
+  --raio-card: 1rem;   /* cantos arredondados dos cards */
+  --raio-campo: 0.625rem;  /* cantos dos inputs */
+}
+
+
+/* ---------- 0.2 Reset ---------- */
+/* border-box: largura total já inclui padding e borda (boa prática do slide de box-sizing) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ESCALA DO SITE: fontes, espaçamentos, cards e cantos usam rem, e 1rem é
+   o font-size do <html>. Mudando só este número, tudo cresce ou diminui junto.
+   100% = 16px (o padrão do navegador), então para ler os valores: 1rem = 16px,
+   1.5rem = 24px... A porcentagem também respeita quem aumentou a fonte nas
+   configurações do navegador (acessibilidade).
+   Continuam em px: bordas e contornos de 1-2px (para ficarem nítidos),
+   transform, as margens laterais da página e os pontos de quebra (@media). */
+html {
+  font-size: 85%;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Imagens nunca distorcem nem estouram o layout (slide "Boas práticas com imagens").
+   height: auto é o que permite usar width e height no <img>: o navegador
+   calcula a proporção antes de baixar a foto e reserva o espaço (sem salto de layout). */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+
+/* ---------- 0.3 Header (nav) — fixo no topo de todas as páginas ---------- */
+/* position: sticky = o header rola junto até encostar no topo (top: 0)
+   e fica preso ali enquanto o resto da página rola por baixo dele. */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 10;                          /* fica por cima das seções que passam por baixo */
+  display: flex;
+  justify-content: space-between;       /* logo na esquerda, links na direita */
+  align-items: center;
+  height: 4.5rem;
+  padding: 0 var(--margem);
+  background-color: var(--cor-fundo);   /* fundo sólido para o conteúdo não aparecer atrás */
+  border-bottom: 1px solid var(--cor-linha);
+}
+
+.logo img {
+  height: 2.875rem;
+  width: auto;
+}
+
+.cabecalho-links {
+  display: flex;
+  gap: 2.75rem;
+}
+
+.cabecalho-links a {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+}
+
+.cabecalho-links a:hover {
+  color: var(--cor-azul);
+}
+
+/* No Hub o logo tem as duas marcas lado a lado */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Página atual: o NavLink põe a classe "active" no link */
+.cabecalho-links a.active,
+.nav-links-small a.active {
+  color: var(--cor-azul);
+}
+
+.cabecalho-links a.active {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+}
+
+/* ---------- Menu hambúrguer (celular) ----------
+   Baseado no styles.css do material do professor (pasta hamburguer).
+   Mudanças: cores pelas variáveis do tema, top = altura do .cabecalho
+   e o menu fica DENTRO do header fixo, para abrir logo abaixo dele. */
+
+/* Botão: escondido no desktop */
+.hamburguer {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.bar {
+  width: 1.875rem;
+  height: 0.1875rem;
+  background-color: var(--cor-texto);
+  margin: 0.25rem 0;
+}
+
+/* Menu do celular */
+.menu-small {
+  position: absolute;
+  top: 4.5rem;               /* altura do .cabecalho */
+  left: 0;
+  width: 100%;
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+
+  display: none;
+  flex-direction: column;
+  padding: 1.5rem var(--margem);
+}
+
+/* O menu passa de display: none para flex. Uma transition não funciona
+   nessa troca (não existe "meio do caminho" entre none e flex), então a
+   entrada é uma animação com @keyframes (seção 11). Só opacity e
+   transform: as propriedades leves, que não recalculam o layout. */
+.menu-small.activated {
+  display: flex;
+  animation: menu-abrir 0.3s ease;
+}
+
+.nav-links-small {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nav-links-small a {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+}
+
+.nav-links-small a:hover {
+  color: var(--cor-azul);
+}
+
+
+/* ---------- 0.4 Seções da página e tipografia comum ---------- */
+/* Cada <section class="pagina"> é uma parte da página que rola (Home, Sobre, Treinos...). */
+.pagina {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* conteúdo no meio da altura da seção */
+  min-height: 100vh;         /* cada seção ocupa pelo menos uma tela inteira */
+  padding: 7.5rem var(--margem);
+  scroll-margin-top: 4.5rem;   /* ao clicar num link #secao, o título não fica atrás do header fixo */
+}
+
+/* Linha fina entre uma seção e a próxima (combinador "+": seção logo depois de outra seção) */
+.pagina + .pagina {
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* Texto pequeno azul acima do título: "ONE TO ONE · CADASTRO" */
+.eyebrow {
+  font-family: var(--fonte-condensada);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cor-azul);
+  margin-bottom: 2rem;
+}
+
+/* Título gigante das páginas: "CADASTRO DE ALUNOS" */
+.titulo-pagina {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(4rem * var(--escala-titulos));             /* Archivo 900 é pesada: 64px já se destaca (antes 96px) */
+  line-height: 1.05;
+  text-transform: uppercase;
+  overflow-wrap: break-word;   /* em telas bem estreitas, palavra longa quebra em vez de sair da tela */
+  margin-bottom: 2.5rem;
+}
+
+/* Parágrafo de apoio logo abaixo do título */
+.texto-lead {
+  font-size: 1.375rem;
+  line-height: 1.9;
+  color: var(--cor-texto-suave);
+}
+
+/* Layout de duas colunas iguais (texto | formulário/foto) */
+.duas-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+}
+
+/* min-width: 0 deixa cada coluna encolher em telas pequenas
+   (sem isso o conteúdo empurra a página para o lado) */
+.duas-colunas > * {
+  min-width: 0;
+}
+
+/* ---------- 0.5 Botões ---------- */
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 3.75rem;
+  padding: 0 2.75rem;
+  border-radius: 62.4375rem;   /* formato pílula */
+  font-family: var(--fonte-condensada);
+  font-size: 1.0625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Botão cheio azul: "FAZER CADASTRO" */
+.btn-primario {
+  background-color: var(--cor-azul);
+  color: var(--cor-sobre-destaque);
+}
+
+/* Botão só com contorno: "JÁ SOU ALUNO · LOGIN" */
+.btn-contorno {
+  background-color: transparent;
+  color: var(--cor-texto);
+  border-color: var(--cor-linha-forte);
+}
+
+.btn-primario:hover {
+  background-color: var(--cor-destaque-hover);
+}
+
+.btn-contorno:hover {
+  border-color: var(--cor-azul);
+}
+
+/* Variante com fonte Archivo pesada (usada em Contato e Home) */
+.btn-pesado {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  letter-spacing: 0.25em;
+}
+
+
+/* ---------- 0.7 Cards e placeholders de mídia ---------- */
+.card {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+}
+
+
+/* Fotos reais dentro das <figure> (hero, equipe e galeria) */
+.foto {
+  overflow: hidden;                 /* a imagem respeita os cantos arredondados */
+  border-radius: var(--raio-card);
+  background-color: var(--cor-placeholder);
+}
+
+/* object-fit: cover = a imagem preenche a caixa toda sem distorcer (corta as sobras).
+   object-position escolhe qual parte fica visível quando há corte.
+   As pessoas estão no meio das fotos, então o corte é centralizado. */
+.foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ---------- 0.8 Footer (nav) — no final da página, depois da última seção ---------- */
+/* Linha de cima: logo | links | redes sociais. Linha de baixo: copyright.
+   flex-wrap deixa o copyright (100% de largura) cair para a linha de baixo. */
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 3.5rem var(--margem) 2.5rem;
+  border-top: 1px solid var(--cor-linha);
+}
+
+.rodape-logo img {
+  height: 2rem;
+  width: auto;
+}
+
+.rodape-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+}
+
+.rodape-links a {
+  font-family: var(--fonte-condensada);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cor-texto-suave);
+}
+
+.rodape-links a:hover {
+  color: var(--cor-azul);
+}
+
+/* Redes sociais: ícones redondos com borda fina */
+.rodape-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.rodape-social a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;   /* círculo */
+  font-size: 1.125rem;
+  color: var(--cor-texto-suave);
+}
+
+/* Passar o mouse: círculo preenchido com a cor de destaque da marca */
+.rodape-social a:hover {
+  background-color: var(--cor-azul);
+  border-color: var(--cor-azul);
+  color: var(--cor-fundo);
+}
+
+.rodape-copy {
+  width: 100%;   /* ocupa a linha inteira de baixo */
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--cor-linha);
+  font-size: 0.8125rem;
+  color: var(--cor-texto-apagado);
+}
+
+
+/* ---------- 0.9 Responsivo global (tablets e celulares) ---------- */
+/* Tablets: as duas colunas ficam uma embaixo da outra */
+@media (max-width: 1100px) {
+  .duas-colunas {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  /* Títulos um pouco menores para palavras longas (LOCALIZAÇÃO) caberem */
+  .titulo-pagina {
+    font-size: calc(3.25rem * var(--escala-titulos));
+  }
+}
+
+/* Celulares */
+@media (max-width: 767px) {
+  /* Celular: esconde o menu desktop e mostra o hambúrguer */
+  .cabecalho-links {
+    display: none;
+  }
+
+  .hamburguer {
+    display: flex;
+  }
+
+  .pagina {
+    min-height: auto;
+    padding: 4.5rem var(--margem);
+  }
+
+  .titulo-pagina {
+    font-size: calc(2.125rem * var(--escala-titulos));
+  }
+
+  .texto-lead {
+    font-size: 1.0625rem;
+  }
+
+  .rodape {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Celular: logos menores para caberem ao lado do hambúrguer */
+  .logo {
+    gap: 0.75rem;
+  }
+
+  .logo img {
+    height: 2rem;
+  }
+}
+
+ /* ===1. HOME === */
+
+/* Coluna do texto um pouco mais larga que a da foto (3 partes x 2 partes) */
+.home-hero {
+  grid-template-columns: 3fr 2fr;
+  align-items: center;
+}
+
+.home-hero .eyebrow {
+  font-size: 0.9375rem;
+  letter-spacing: 0.35em;
+}
+
+/* clamp(mínimo, ideal, máximo): o título acompanha a largura da tela
+   (4.4vw = 4,4% da largura) sem passar de 76px nem ficar menor que 48px */
+.home-titulo {
+  font-size: calc(clamp(3rem, 4.4vw, 4.75rem) * var(--escala-titulos));
+  margin-bottom: 1.75rem;
+}
+
+.home-hero .texto-lead {
+  max-width: 37.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.home-botoes {
+  display: flex;
+}
+
+/* CTA único "AGENDAR AULA EXPERIMENTAL": botão cheio com Archivo */
+.home-botoes .btn-pesado {
+  height: 4rem;
+  padding: 0 2.75rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.1em;
+}
+
+.home-foto {
+  height: 32.5rem;
+}
+
+/* Tablets: texto em cima, foto embaixo */
+@media (max-width: 1100px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-titulo {
+    font-size: calc(2.375rem * var(--escala-titulos));
+  }
+
+  .home-foto {
+    height: 17.5rem;
+  }
+}
+/* =====================================================================
+   2. SOBRE + TREINOS
+   Componentes Sobre.jsx e Treinos.jsx (páginas PKZ e One to One)
+   ===================================================================== */
+
+/* ----- 2.1 Sobre nós ----- */
+.sobre-titulo {
+  font-size: calc(4rem * var(--escala-titulos));
+  margin-bottom: 2.5rem;
+}
+
+.sobre-texto p {
+  font-size: 1.3125rem;
+  line-height: 1.95;
+  color: var(--cor-texto-suave);
+  margin-bottom: 0.25rem;
+}
+
+/* Link "COMPARAR OS DOIS PROGRAMAS →" (leva para a escolha no Hub) */
+.link-seta {
+  display: inline-block;
+  margin-top: 3.5rem;
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cor-azul);
+}
+
+.link-seta:hover {
+  color: var(--cor-texto);
+}
+
+.sobre-foto {
+  height: 31.25rem;
+}
+
+/* ----- 2.2 Informações sobre treinos ----- */
+.treinos-intro {
+  max-width: 42.5rem;
+  margin-bottom: 4rem;
+}
+
+/* 3 cards lado a lado */
+.treinos-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* Tablets e celulares: um card embaixo do outro */
+@media (max-width: 1200px) {
+  .treinos-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card em coluna: texto empurrado para baixo com margin-top: auto */
+.treino-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 21.25rem;
+  padding: 3rem 2.75rem;
+}
+
+.treino-card .eyebrow {
+  font-size: 0.8125rem;
+  margin-bottom: 1.25rem;
+}
+
+/* One to One (6 cards): mais baixos e com menos respiro, para a seção não ficar longa */
+.treinos-cards-compacto .treino-card {
+  min-height: 16.25rem;
+  padding: 2.5rem 2.25rem;
+}
+
+.treinos-cards-compacto .treino-card h2 + p {
+  padding-top: 1.25rem;
+}
+
+/* Linha do topo nos cards com selo: eyebrow à esquerda, selo à direita */
+.treino-card-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.treino-card-topo .eyebrow {
+  margin-bottom: 0;
+}
+
+/* Selo de Nutrição e Fisioterapia (ícone do Font Awesome + profissional) */
+.treino-selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem 0.375rem 0.375rem;
+  border: 1px solid var(--cor-azul-borda);
+  border-radius: 62.4375rem;
+  background-color: var(--cor-azul-escuro);
+  font-family: var(--fonte-condensada);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cor-azul);
+}
+
+/* Bolinha azul com o ícone dentro */
+.treino-selo i {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background-color: var(--cor-azul);
+  font-size: 0.875rem;
+  color: var(--cor-fundo);
+}
+
+.treino-card h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(1.875rem * var(--escala-titulos));
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/*
+ * Só o parágrafo logo depois do título (combinador "+"),
+ * para não pegar o eyebrow do card.
+ */
+.treino-card h2 + p {
+  margin-top: auto;
+  padding-top: 2rem;
+  font-size: 1.1875rem;
+  line-height: 1.8;
+  color: var(--cor-texto-suave);
+}
+
+@media (max-width: 767px) {
+  .sobre-titulo {
+    font-size: calc(2.125rem * var(--escala-titulos));
+  }
+
+  /* Cards mais compactos no celular para acomodar palavras longas. */
+  .treino-card,
+  .treinos-cards-compacto .treino-card {
+    min-height: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .treino-card h2 {
+    font-size: calc(1.25rem * var(--escala-titulos));
+    letter-spacing: 0.02em;
+  }
+}
+/* =====================================================================
+   3. PLANOS + UNIDADES
+   Componentes Planos.jsx, NossosPlanos.jsx e Unidades.jsx
+   ===================================================================== */
+
+/* ----- 3.1 Planos (Aula gratuita experimental) — tudo centralizado ----- */
+.planos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Topo da seção pode encolher até a largura da tela */
+.planos header {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.planos .eyebrow {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+}
+
+.planos-texto {
+  max-width: 51.25rem;
+  margin: 0 auto 3rem; /* centraliza o bloco dentro do <header> */
+  font-size: 1.25rem;
+  line-height: 2;
+  color: var(--cor-texto-medio);
+}
+
+/* Botão largo "AGENDAR AULA EXPERIMENTAL" */
+.btn-largo {
+  width: 100%;
+  max-width: 55rem;
+  height: 4.5rem;
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: 1.375rem;
+  letter-spacing: 0.2em;
+}
+
+/* Passo a passo numerado (lista ordenada) */
+.passos {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-top: 6rem;
+  text-align: left;
+}
+
+.passo {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+/* Círculo com o número */
+.passo-numero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 4rem; /* não cresce, não encolhe, 64px fixos */
+  height: 4rem;
+  border: 2px solid var(--cor-azul-borda);
+  border-radius: 50%;
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--cor-azul);
+}
+
+.passo h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(2rem * var(--escala-titulos));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.passo p {
+  font-size: 1.1875rem;
+  color: var(--cor-texto-medio);
+  letter-spacing: 0.02em;
+}
+
+/* ----- 3.2 Unidades e localização ----- */
+.unidade-nome {
+  font-family: var(--fonte-condensada);
+  font-weight: 400;
+  font-size: calc(1.875rem * var(--escala-titulos));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.unidade-endereco {
+  font-style: normal; /* tira o itálico padrão do <address> */
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--cor-texto-suave);
+}
+
+/* Mapa do Google embutido via iframe */
+.mapa {
+  width: 100%;
+  height: 30rem;
+  border: 0;
+  border-radius: var(--raio-card);
+}
+
+@media (max-width: 767px) {
+  .btn-largo {
+    font-size: 0.9375rem;
+    letter-spacing: 0.1em;
+  }
+
+  .passo {
+    gap: 1.25rem;
+  }
+
+  .passo h2 {
+    font-size: calc(1.25rem * var(--escala-titulos));
+  }
+}
+
+
+/* ----- 3.3 Planos da PKZ: texto de apoio ----- */
+.planos-pkz-texto {
+  max-width: 40rem;
+  margin-bottom: 3.5rem;
+}
+
+.planos-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* Card em coluna: botão sempre no fim do card */
+.plano-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 27.5rem;
+  padding: 3rem 2.75rem 2.75rem;
+}
+
+.plano-card h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 500;
+  font-size: calc(1.625rem * var(--escala-titulos));
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.plano-card p {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  font-size: 1.1875rem;
+  line-height: 1.7;
+  color: var(--cor-texto-suave);
+}
+
+.plano-card .btn {
+  width: 100%;
+  height: 3.75rem;
+  margin-top: 3rem;
+  font-size: 1.0625rem;
+  letter-spacing: 0.02em;
+}
+
+/* Card do meio: fundo mais claro e borda na cor de destaque */
+.plano-destaque {
+  background-color: var(--cor-superficie);
+  border-color: var(--cor-azul);
+}
+
+/* Tablets e celulares: um card embaixo do outro */
+@media (max-width: 1200px) {
+  .planos-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Celulares: cards de plano mais compactos */
+@media (max-width: 767px) {
+  .plano-card {
+    min-height: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .plano-card h2 {
+    font-size: calc(1.5rem * var(--escala-titulos));
+  }
+}
+
+/* ----- 3.5 Nossos planos (cards criados pelo NossosPlanos.jsx) ----- */
+.planos-lista-texto {
+  max-width: 45rem;
+  margin-bottom: 3.5rem;
+}
+
+/* One to One: 4 planos lado a lado */
+.planos-lista {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* Card em coluna. O gap dá o espaço entre as partes e o
+   margin-top: auto do botão empurra ele para o fim do card. */
+.plano-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2.5rem 2rem 2rem;
+}
+
+.plano-item .eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  letter-spacing: 0.2em;
+  margin-bottom: 0;
+}
+
+.plano-nome {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(1.875rem * var(--escala-titulos));
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.plano-descricao {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--cor-texto-suave);
+}
+
+/* Lista de serviços com um tracinho na cor de destaque (::before) */
+.plano-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.plano-itens li {
+  position: relative;
+  padding-left: 1.375rem;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--cor-texto-suave);
+}
+
+.plano-itens li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.625rem;
+  height: 2px;
+  background-color: var(--cor-azul);
+}
+
+/* Selo "Prioridade no agendamento" */
+.plano-nota {
+  align-self: flex-start;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--cor-azul);
+  border-radius: 62.4375rem;
+  font-family: var(--fonte-condensada);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cor-azul);
+}
+
+.plano-item .btn {
+  width: 100%;
+  margin-top: auto;
+  padding: 0 1rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.1em;
+}
+
+/* Plano em destaque: borda na cor da marca e fundo um pouco mais claro */
+.plano-item-destaque {
+  background-color: var(--cor-superficie);
+  border-color: var(--cor-azul);
+}
+
+/* One to One: 2 por linha em telas médias */
+@media (max-width: 1400px) {
+  .planos-lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .planos-lista {
+    grid-template-columns: 1fr;
+  }
+
+  .plano-item {
+    padding: 2rem 1.5rem;
+  }
+
+  .plano-nome {
+    font-size: calc(1.5rem * var(--escala-titulos));
+  }
+}
+/* =====================================================================
+   4. CONTATO
+   Componentes Contato.jsx e CardContato.jsx
+   ===================================================================== */
+
+/* ----- 4.1 Contate-nos ----- */
+.contato-titulo {
+  margin-bottom: 3rem;
+}
+
+/* Espaço entre o texto de introdução e os cards de contato */
+.contato-titulo + .texto-lead {
+  margin-bottom: 3.5rem;
+}
+
+.contato-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card clicável de WhatsApp / Instagram */
+.contato-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2.125rem 2.5rem 2.125rem 2rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover: o card sobe 4px. transform não mexe no layout dos vizinhos,
+   por isso é a forma leve de animar movimento (aula de animações) */
+.contato-card:hover {
+  border-color: var(--cor-azul);
+  transform: translateY(-4px);
+}
+
+.contato-icone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 3.5rem;
+  height: 3.5rem;
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.icone-whatsapp {
+  background-color: #25d366;
+  border-radius: 50%;
+}
+
+.icone-instagram {
+  background-color: #e1306c;
+  border-radius: 0.75rem;
+}
+
+/* Rótulo em cima */
+.contato-rotulo {
+  display: block;
+  font-family: var(--fonte-condensada);
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cor-azul);
+}
+
+/* Valor embaixo */
+.contato-valor {
+  font-family: var(--fonte-condensada);
+  font-size: 1.875rem;
+  line-height: 1.3;
+}
+
+/* Seta "→" empurrada para a direita */
+.contato-seta {
+  margin-left: auto;
+  font-size: 1.375rem;
+  color: var(--cor-azul);
+}
+
+/* Card da direita: Atendimento + Unidade */
+.atendimento-card {
+  padding: 3rem;
+}
+
+.atendimento-card .eyebrow {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  margin-bottom: 0.625rem;
+}
+
+/* Parágrafo logo depois do eyebrow "ATENDIMENTO" */
+.atendimento-card .eyebrow + p {
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: var(--cor-texto-suave);
+}
+
+.atendimento-unidade {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(1.625rem * var(--escala-titulos));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+}
+
+.atendimento-card address {
+  font-style: normal;
+  font-size: 1.125rem;
+  color: var(--cor-texto-suave);
+  margin-bottom: 2rem;
+}
+
+.atendimento-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* flex: 1 faz os botões dividirem a linha; nowrap impede o texto de quebrar dentro da pílula */
+.atendimento-botoes .btn {
+  flex: 1 1 auto;
+  height: 3.75rem;
+  padding: 0 1.75rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* ----- 4.3 Contato com 3 cards em linha (PKZ) ----- */
+.contato-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* min-width: 0 deixa o item da grade encolher (evita que e-mail comprido estoure) */
+.contato-grid li {
+  min-width: 0;
+}
+
+/* Cada card ocupa a altura toda do <li> da grade */
+.contato-grid .contato-card {
+  height: 100%;
+  padding: 2.75rem 2.25rem;
+}
+
+/* E-mail comprido quebra a linha em vez de sair do card */
+.contato-grid .contato-valor {
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+/* Ícone de e-mail: círculo na cor de destaque */
+.icone-email {
+  background-color: var(--cor-azul);
+  border-radius: 50%;
+  font-size: 1.375rem;
+  color: var(--cor-sobre-destaque);
+}
+
+/* ----- 4.4 Contato da Fisioterapia: adultos | jovens ----- */
+/* Cada coluna tem um título e a lista de canais da marca */
+.contato-grupo-titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: 900;
+  font-size: calc(1.625rem * var(--escala-titulos));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+}
+
+/* Meia coluna é mais estreita: valor menor e e-mail comprido quebra a linha */
+.contato-grupo .contato-valor {
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+/* ----- Responsividade / Media Queries ----- */
+
+/* Tablets e celulares: um canal embaixo do outro */
+@media (max-width: 1200px) {
+  .contato-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Cards de contato menores no celular para caber na tela */
+  .contato-card,
+  .contato-grid .contato-card {
+    gap: 1rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .contato-icone {
+    flex: 0 0 2.75rem;
+    height: 2.75rem;
+    font-size: 1.5rem;
+  }
+
+  .contato-valor,
+  .contato-grid .contato-valor,
+  .contato-grupo .contato-valor {
+    font-size: 1.125rem;
+  }
+
+  .contato-grupo-titulo {
+    font-size: calc(1.25rem * var(--escala-titulos));
+    margin-bottom: 1.25rem;
+  }
+
+  .atendimento-card {
+    padding: 1.75rem 1.375rem;
+  }
+
+  .atendimento-unidade {
+    font-size: calc(1.25rem * var(--escala-titulos));
+  }
+
+  /* No celular os botões ficam um embaixo do outro, ocupando a largura toda */
+  .atendimento-botoes .btn {
+    flex-basis: 100%;
+    padding: 0 1rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* =====================================================================
+   6. GALERIA
+   Componente Galeria.jsx
+===================================================================== */
+
+/* ----- 6.1 Galeria geral (slider do Galeria.jsx) ----- */
+
+/* Foto à esquerda | contador, legenda e controles à direita */
+.galeria {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.galeria > * {
+    min-width: 0;
+}
+
+/* Quadro da foto. As fotos da galeria são verticais (928x1152 = 4:5),
+   então o quadro tem o mesmo formato (aspect-ratio). O object-fit: cover
+   da .foto img (seção 0.7) faz a foto preencher o quadro sem distorcer. */
+.galeria-quadro {
+    position: relative;   /* âncora das fotos empilhadas (absolute) */
+    aspect-ratio: 4 / 5;
+    max-height: 80vh;
+}
+
+/* Todas as fotos ocupam o quadro inteiro, uma em cima da outra.
+   Só a que tem a classe "ativa" fica visível. */
+.galeria-slide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.galeria-slide.ativa {
+    opacity: 1;
+}
+
+.galeria-contador {
+    margin-bottom: 1rem;
+}
+
+/* Legenda: o alt da foto, trocado pelo JS */
+.galeria-legenda {
+    min-height: 2.4em;   /* reserva 2 linhas, para os botões não pularem */
+    margin-bottom: 2.5rem;
+    font-family: var(--fonte-titulo);
+    font-weight: 900;
+    font-size: calc(2.25rem * var(--escala-titulos));
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+/* O atributo hidden esconde os controles até o JS carregar.
+   Sem esta regra, o display: flex abaixo ganharia do hidden (igual à seção 5.7). */
+.galeria-controles[hidden] {
+    display: none;
+}
+
+.galeria-controles {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Setas ‹ ›: botões redondos com borda fina */
+.galeria-seta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: none;
+    border: 1px solid var(--cor-borda);
+    border-radius: 50%;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--cor-texto);
+    cursor: pointer;
+}
+
+.galeria-seta:hover {
+    border-color: var(--cor-azul);
+    color: var(--cor-azul);
+}
+
+.galeria-tracos {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Tracinho: traço de 24x2px visível, mas botão de 22px de altura para
+   ficar fácil de clicar (background-clip pinta só o miolo, sem o padding) */
+.galeria-traco {
+    width: 1.5rem;
+    height: 1.375rem;
+    padding: 0.625rem 0;
+    border: 0;
+    background-color: var(--cor-texto-apagado);
+    background-clip: content-box;
+    cursor: pointer;
+}
+
+.galeria-traco.ativo {
+    background-color: var(--cor-azul);
+}
+
+.galeria-seta:focus-visible,
+.galeria-traco:focus-visible {
+    outline: 2px solid var(--cor-azul);
+    outline-offset: 3px;
+}
+
+/* ----- Layout responsivo ----- */
+
+/* Tablets: foto em cima, legenda e controles embaixo */
+@media (max-width: 1100px) {
+    .galeria {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .galeria-quadro {
+        width: 100%;
+        max-width: 35rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .galeria-legenda {
+        font-size: calc(1.375rem * var(--escala-titulos));
+        margin-bottom: 1.5rem;
+    }
+
+    .galeria-seta {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+
+/* =====================================================================
+   HUB
+   Página Hub.jsx e componentes da pasta componentes/hub
+   Visual próprio do Hub: creme + lilás (fontes iguais às das outras páginas).
+   ===================================================================== */
+
+/* ----- 7.1 Variáveis só do Hub ----- */
+.hub {
+    --hub-fundo: #0e0d0d;
+    --hub-creme: #efe9e1;
+    --hub-texto: #cfc9c1;
+    --hub-lilas: #8b90f8;
+    --hub-linha: #2a2a45;
+    --hub-azul-pkz: #1f1f8f;
+    --hub-ciano: #bdeff6;
+    --hub-sobre-lilas: #10103a;      /* texto em cima do lilás */
+    --hub-sobre-ciano: #0e2a30;      /* texto em cima do ciano */
+    --hub-claro: #efe9e1;            /* texto em cima de foto ou do azul PKZ: sempre claro */
+    --hub-borda: #222222;            /* linhas do footer */
+    --hub-borda-forte: #333333;      /* círculos das redes sociais */
+    --hub-separador: #444444;
+    --hub-placeholder: #161515;      /* caixa da foto antes de carregar */
+    /* Mesmas fontes da One to One em todas as páginas */
+    --hub-titulo: var(--fonte-condensada);
+    --hub-corpo: var(--fonte-texto);
+    /* Margem lateral do Hub: a mesma regra das outras páginas (6% da tela) */
+    --hub-margem: max(24px, 6vw, calc((100% - 1680px) / 2));
+
+    margin: 0; /* tira a margem branca padrão do navegador */
+    background-color: var(--hub-fundo);
+    color: var(--hub-creme);
+    font-family: var(--hub-corpo);
+}
+
+/* Listas do nav e do footer: sem bolinhas e sem recuo */
+.hub nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Link base do Hub: sem sublinhado e com a cor do texto em volta.
+   Fica antes das outras regras para que botões e links coloridos sobrescrevam a cor. */
+.hub-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Conteúdo do Hub com a mesma margem lateral do header e do footer */
+.hub-container {
+    padding-left: var(--hub-margem);
+    padding-right: var(--hub-margem);
+}
+
+/* Linha fina lilás entre as seções */
+.hub-divisor {
+    height: 1px;
+    margin: 0 var(--hub-margem); /* linha alinhada com o conteúdo */
+    background-color: var(--hub-linha);
+    border: 0;
+}
+
+/* ----- 7.2 Header (nav) do Hub ----- */
+/* Header fixo no topo (sticky):
+   rola junto até encostar no topo e fica preso ali. */
+.hub-cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 10;                          /* por cima do hero e das fotos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4.5rem;
+    padding: 0 var(--hub-margem);
+    background-color: var(--hub-fundo);   /* fundo sólido: o conteúdo não aparece atrás */
+}
+
+/* Ao clicar em "Escolha" ou "Fotos", o título não fica escondido atrás do header */
+.hub main section {
+    scroll-margin-top: 4.5rem;
+}
+
+.hub-links {
+    display: flex;
+    gap: 2.125rem;
+}
+
+.hub-links a {
+    padding-bottom: 0.375rem;
+    font-family: var(--hub-corpo);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* Link da página atual: lilás com traço embaixo */
+.hub-links .ativo {
+    color: var(--hub-lilas);
+    border-bottom: 1px solid var(--hub-lilas);
+}
+
+/* Botão "AGENDE UM TREINO" preso na direita */
+.hub-cta {
+    position: absolute;
+    right: var(--hub-margem); /* alinhado com a borda direita do conteúdo */
+    padding: 0.625rem 1.25rem;
+    background-color: var(--hub-lilas);
+    border-radius: 62.4375rem;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--hub-sobre-lilas);
+}
+
+/* Menu hambúrguer no Hub: mesmo .hamburguer/.menu-small da seção 0.3,
+   só com as cores e a fonte do Hub */
+.hub .bar {
+    background-color: var(--hub-creme);
+}
+
+.hub .menu-small {
+    z-index: 10; /* por cima do hero */
+    background: var(--hub-fundo);
+    border-bottom: 1px solid var(--hub-linha);
+    padding: 1.5rem var(--hub-margem);
+}
+
+/* Imagens do Hub: preenchem a caixa inteira, por baixo do selo, do play e da legenda */
+.hub-hero-foto img,
+.hub-foto img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Hero do Hub: o texto fica à esquerda, então a foto é alinhada pela direita,
+   onde estão os atletas (no celular a caixa é estreita e corta as laterais) */
+.hub-hero-foto img {
+    object-position: 70% center;
+}
+
+.hub .hub-foto {
+    overflow: hidden;
+    border: 0; /* tira o tracejado do placeholder (.hub na frente = vale mais que a regra .hub-foto da 7.4) */
+}
+
+/* Selo e legendas ficam por cima da foto */
+.hub-selo,
+.hub-video-legenda,
+.hub-video figcaption {
+    z-index: 1;
+}
+
+/* ----- 7.3 Hero ----- */
+/* Hero ocupa a tela (menos o header) com o texto centralizado na altura */
+.hub-hero {
+    position: relative; /* âncora da foto de fundo e do slider */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 4.5rem);
+    padding-top: 4rem;
+    padding-bottom: 7.5rem; /* espaço entre o botão e a linha de baixo */
+}
+
+/* Foto de fundo ocupando o hero inteiro */
+.hub-hero-foto {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8125rem;
+    color: #5c5c5c;
+    background-color: var(--hub-placeholder); /* área da foto visível enquanto não tem imagem */
+}
+
+.hub-hero-conteudo {
+    position: relative; /* fica por cima da foto */
+    max-width: 32.5rem;
+}
+
+.hub-eyebrow {
+    font-size: 0.8125rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--hub-lilas);
+    margin-bottom: 1.125rem;
+}
+
+.hub-titulo {
+    font-family: var(--hub-titulo);
+    font-weight: 500;
+    font-size: calc(5.5rem * var(--escala-titulos));
+    line-height: 0.88;
+    text-transform: uppercase;
+    overflow-wrap: break-word; /* palavra longa quebra em vez de sair da tela */
+    margin-bottom: 1.25rem;
+}
+
+/* Palavras "ALTA PERFORMANCE" em lilás */
+.hub-titulo span {
+    color: var(--hub-lilas);
+}
+
+.hub-hero-conteudo p {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--hub-texto);
+    margin-bottom: 1.625rem;
+}
+
+/* Botão pílula genérico do Hub */
+.hub-btn {
+    display: inline-block;
+    padding: 0.875rem 1.5rem;
+    border-radius: 62.4375rem;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.hub-btn-lilas {
+    background-color: var(--hub-lilas);
+    color: var(--hub-sobre-lilas);
+}
+
+/* Controles do slider (setas e tracinhos do HubHero.jsx) */
+.hub-slider {
+    position: absolute;
+    right: var(--hub-margem); /* alinhado com a borda direita do conteúdo */
+    bottom: 3.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+}
+
+/* O atributo hidden esconde o slider até o JS carregar */
+.hub-slider[hidden] {
+    display: none;
+}
+
+.hub-slider-tracos {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Tracinho */
+.hub-slider-traco {
+    width: 0.875rem;
+    height: 1.375rem;
+    padding: 0.625rem 0;
+    border: 0;
+    background-color: #555555;
+    background-clip: content-box;
+    cursor: pointer;
+}
+
+.hub-slider-traco.ativo {
+    background-color: var(--hub-lilas);
+}
+
+/* Setas ‹ ›: botão sem o visual padrão do navegador */
+.hub-slider-seta {
+    margin: 0 0.625rem;
+    padding: 0.25rem 0.5rem;
+    background: none;
+    border: 0;
+    font: inherit;    /* herda o font-size de 20px do .hub-slider */
+    color: inherit;
+    cursor: pointer;
+}
+
+.hub-slider-seta:hover {
+    color: var(--hub-lilas);
+}
+
+.hub-slider-traco:focus-visible,
+.hub-slider-seta:focus-visible {
+    outline: 2px solid var(--hub-lilas);
+    outline-offset: 3px;
+}
+
+/* Troca da foto do hero: o HubHero.jsx põe a classe "trocando" (foto some),
+troca a foto e tira a classe (foto nova aparece) */
+.hub-hero-foto img {
+    transition: opacity 0.3s;
+}
+
+.hub-hero-foto img.trocando {
+    opacity: 0;
+}
+
+/* ----- 7.4 Escolha sua jornada ----- */
+.hub-secao {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+}
+
+.hub-subtitulo {
+    font-family: var(--hub-titulo);
+    font-weight: 500;
+    font-size: calc(3.125rem * var(--escala-titulos));
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+/* Traço lilás */
+.hub-traco {
+    width: 2.5rem;
+    height: 2px;
+    margin: 1.125rem 0 2rem;
+    background-color: var(--hub-lilas);
+    border: 0;
+}
+
+/* 3 marcas lado a lado (PKZ, One to One e Fisioterapia), com espaço entre elas */
+.hub-marcas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 3.5rem;   /* quando quebram em mais de uma linha (tablet e celular) */
+}
+
+/* Caixa da foto com borda tracejada (lugar da imagem) */
+.hub-foto {
+    position: relative; /* âncora do selo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20.5rem;
+    border: 1px dashed var(--hub-separador);
+    background-color: var(--hub-placeholder);
+    font-size: 0.8125rem;
+    color: #8a8a8a;
+}
+
+/* Selo "ATÉ 17 ANOS" / "ADULTOS" no canto da foto */
+.hub-selo {
+    position: absolute;
+    top: 0.875rem;
+    left: 0.875rem;
+    padding: 0.25rem 0.875rem;
+    border-radius: 62.4375rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.selo-pkz {
+    background-color: #14145a;
+    border: 1px solid var(--hub-lilas);
+    color: var(--hub-claro);
+}
+
+.selo-one {
+    background-color: var(--hub-ciano);
+    color: var(--hub-sobre-ciano);
+}
+
+.selo-fisio {
+    background-color: var(--hub-claro);
+    color: #17151a;
+}
+
+.hub-marca-logo {
+    height: 2rem;
+    width: auto;
+    margin: 1.625rem 0 0.875rem;
+}
+
+/* Nome escrito no lugar do logo (marca sem logo): mesma altura do logo.
+   ".hub-marca" na frente vale mais que a regra ".hub-marca p" */
+.hub-marca .hub-marca-nome {
+    margin: 1.625rem 0 0.875rem;
+    font-family: var(--hub-titulo);
+    font-size: 2rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--hub-creme);
+}
+
+.hub-marca p {
+    font-size: 0.9375rem;
+    color: var(--hub-texto);
+    margin-bottom: 1.25rem;
+}
+
+.hub-btn-pkz {
+    background-color: var(--hub-azul-pkz);
+    border: 1px solid var(--hub-lilas);
+    color: var(--hub-claro);
+}
+
+.hub-btn-one {
+    background-color: var(--hub-ciano);
+    color: var(--hub-sobre-ciano);
+}
+
+/* Tablet: 3 cards não cabem lado a lado; ficam 2 por linha */
+@media (max-width: 1100px) {
+    .hub-marcas {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Fisioterapia: botão branco com o texto preto */
+.hub-btn-fisio {
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    color: #111111;
+}
+
+/* ----- 7.5 Fotos (Veja a gente em ação) ----- */
+.hub-video-principal {
+    position: relative;
+    margin-top: 1.5rem; /* espaço entre o título "VEJA A GENTE EM AÇÃO" e a foto */
+}
+
+/* Legenda "UM DIA DE TREINO" no canto inferior esquerdo */
+.hub-video-legenda {
+    color: var(--hub-claro);
+    position: absolute;
+    left: 1.25rem;
+    bottom: 0;
+    font-family: var(--hub-titulo);
+    font-size: 1.375rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+/* 3 fotos menores numa grade de 4 colunas (4ª fica vazia, como no design) */
+.hub-videos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem; /* espaço entre a foto principal e as 3 fotos menores */
+}
+
+.hub-video {
+    position: relative;
+    height: 20.625rem;
+}
+
+.hub-video figcaption {
+    color: var(--hub-claro);
+    position: absolute;
+    left: 0.875rem;
+    bottom: 1rem;
+}
+
+.hub-video-tag {
+    display: block; /* tag em cima, título embaixo (sem <br>) */
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--hub-lilas);
+}
+
+.hub-video-titulo {
+    font-family: var(--hub-titulo);
+    font-size: 1.375rem;
+    text-transform: uppercase;
+}
+
+/* ----- 7.6 Footer (nav) do Hub ----- */
+/* Grade: logos | links (no meio) | redes sociais; copyright na linha de baixo */
+.hub-rodape {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    row-gap: 2rem;
+    padding: 3rem var(--hub-margem) 2.25rem;
+    border-top: 1px solid var(--hub-borda);
+}
+
+.hub-rodape-logos {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hub-rodape-logos img {
+    height: 1.625rem;
+    width: auto;
+}
+
+.hub-rodape-separador {
+    width: 1px;
+    height: 1.625rem;
+    background-color: var(--hub-separador);
+}
+
+.hub-rodape-links {
+    display: flex;
+    gap: 3rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.hub-rodape-links li:first-child a {
+    color: var(--hub-lilas);
+}
+
+.hub-rodape-links li:last-child a {
+    color: var(--hub-ciano);
+}
+
+/* Ícones do Hub: mesmas classes do footer das marcas, com as cores do Hub */
+.hub-redes {
+    justify-self: end; /* encosta na direita da grade */
+}
+
+/* .rodape-social não existe neste CSS, então o Hub define o visual completo dos ícones aqui */
+.hub-social {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.hub-social a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--hub-borda-forte);
+    border-radius: 50%;
+    font-size: 1.125rem;
+    color: var(--hub-creme);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Cor de cada marca: lilás = Playmakerz, ciano = One to One */
+.hub-social .social-pkz {
+    color: var(--hub-lilas);
+}
+
+.hub-social .social-one {
+    color: var(--hub-ciano);
+}
+
+.hub-social .social-pkz:hover {
+    background-color: var(--hub-lilas);
+    border-color: var(--hub-lilas);
+    color: var(--hub-sobre-lilas);
+}
+
+.hub-social .social-one:hover {
+    background-color: var(--hub-ciano);
+    border-color: var(--hub-ciano);
+    color: var(--hub-sobre-ciano);
+}
+
+.hub-rodape-copy {
+    grid-column: 1 / -1; /* ocupa todas as colunas, na linha de baixo */
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hub-borda);
+    font-size: 0.75rem;
+    color: #8a8a8a;
+}
+
+/* ----- 7.7 Hub no celular ----- */
+@media (max-width: 767px) {
+    .hub-cabecalho {
+        justify-content: space-between;
+    }
+
+    .hub-cta {
+        position: static;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.6875rem;
+    }
+
+    /* Celular: esconde os links e mostra o hambúrguer */
+    .hub-links {
+        display: none;
+    }
+
+    .hamburguer {
+        display: flex;
+    }
+
+    .hub-titulo {
+        font-size: calc(3rem * var(--escala-titulos));
+    }
+
+    .hub-subtitulo {
+        font-size: calc(2.125rem * var(--escala-titulos));
+    }
+
+    .hub-marcas,
+    .hub-videos,
+    .hub-rodape {
+        grid-template-columns: 1fr;
+    }
+
+    .hub-rodape {
+        gap: 1.5rem;
+    }
+
+    .hub-redes {
+        justify-self: start;
+    }
+}
+
+
+/* =====================================================================
+   8. FONTES RESPONSIVAS NO CELULAR PEQUENO
+   Fica no fim do arquivo para valer por cima das regras de cada seção.
+   ===================================================================== */
+/* Celular pequeno (até 480px): fontes um pouco menores */
+@media (max-width: 480px) {
+  .titulo-pagina,
+  .sobre-titulo {
+    font-size: calc(1.875rem * var(--escala-titulos));
+  }
+
+  .home-titulo {
+    font-size: calc(2.125rem * var(--escala-titulos));
+  }
+
+  .texto-lead {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+
+  .btn {
+    padding: 0 1.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .logo img {
+    height: 1.625rem;
+  }
+
+  .hub-titulo {
+    font-size: calc(2.5rem * var(--escala-titulos));
+  }
+
+  .hub-subtitulo {
+    font-size: calc(1.75rem * var(--escala-titulos));
+  }
+}
+
+
+
+/* =====================================================================
+   9. MODO CLARO E ESCURO
+   O tema vem do atributo data-theme no <html> ("light" ou "dark"),
+   colocado pelo script do index.html (antes de a página aparecer) e
+   pelo hook useTema (src/utils/useTema.js) quando a pessoa troca.
+   O escuro é o padrão (seção 0.1): aqui o claro só troca os valores
+   das variáveis. Como as cores do site vêm de variáveis, nada mais muda.
+   ===================================================================== */
+
+/* ----- 9.1 Cores do tema claro ----- */
+:root[data-theme="light"] {
+  --cor-fundo: #f6f5f1;
+  --cor-superficie: #ffffff;
+  --cor-placeholder: #e7e6e1;
+  --cor-borda: #dcdbd5;
+  --cor-texto: #111111;
+  --cor-texto-suave: #3b3b3b;
+  --cor-texto-apagado: #6b6b6b;
+  --cor-azul: #12738b;            /* azul mais escuro: contraste no fundo claro */
+  --cor-azul-escuro: #e3f2f6;     /* fundos em azul claro */
+  --cor-azul-borda: #9ccbd8;
+
+  --cor-linha: #e2e1db;
+  --cor-linha-forte: #d3d2cb;
+  --cor-sobre-destaque: #ffffff;
+  --cor-destaque-hover: #0d5b6e;
+  --cor-texto-medio: #555555;
+
+  color-scheme: light;
+}
+
+/* Hub: as variáveis dele ficam na classe .hub, então o tema claro
+   também precisa trocar ali */
+:root[data-theme="light"] .hub {
+  --hub-fundo: #f6f5f1;
+  --hub-creme: #17151a;           /* títulos */
+  --hub-texto: #46424c;           /* parágrafos */
+  --hub-lilas: #4f55d6;           /* lilás mais escuro: contraste no fundo claro */
+  --hub-linha: #dcd9ea;
+  --hub-sobre-lilas: #ffffff;
+  --hub-ciano: #0f7a8c;           /* ciano mais escuro: o link "Site One to One" aparece no fundo claro */
+  --hub-sobre-ciano: #ffffff;
+  --hub-borda: #e2e1db;
+  --hub-borda-forte: #cfcdc6;
+  --hub-separador: #c9c6be;
+  --hub-placeholder: #e7e6e1;
+}
+
+/* O hero e as fotos do Hub têm texto e selos em cima da foto: eles continuam
+   com as cores do tema escuro nos dois temas, senão o texto escuro some na foto */
+:root[data-theme="light"] .hub-btn-fisio {
+  border-color: #111111;
+}
+
+:root[data-theme="light"] .hub-hero,
+:root[data-theme="light"] .hub-foto {
+  --hub-creme: #efe9e1;
+  --hub-texto: #cfc9c1;
+  --hub-lilas: #8b90f8;
+  --hub-sobre-lilas: #10103a;
+  --hub-ciano: #bdeff6;
+  --hub-sobre-ciano: #0e2a30;
+  color: var(--hub-creme); /* a cor herdada do .hub já veio escura: define de novo aqui */
+}
+
+/* ----- 9.2 Logos ----- */
+/* Os logos são PNG brancos: no fundo claro eles sumiriam.
+   brightness(0) deixa o logo inteiro preto (só no tema claro). */
+:root[data-theme="light"] .logo img,
+:root[data-theme="light"] .rodape-logo img,
+:root[data-theme="light"] .hub-marca-logo,
+:root[data-theme="light"] .hub-rodape-logos img {
+  filter: brightness(0);
+}
+
+/* ----- 9.3 Seletor de tema (Claro / Escuro / Sistema) no header ----- */
+.seletor-tema {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.1875rem;
+  border: 1px solid var(--cor-linha-forte);
+  border-radius: 62.4375rem;
+}
+
+.seletor-tema button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--cor-texto-apagado);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.seletor-tema button:hover {
+  color: var(--cor-texto);
+}
+
+/* Opção escolhida: aria-checked="true" (o mesmo atributo que o leitor de tela lê) */
+.seletor-tema button[aria-checked="true"] {
+  background-color: var(--cor-azul);
+  color: var(--cor-sobre-destaque);
+}
+
+.seletor-tema button:focus-visible {
+  outline: 2px solid var(--cor-azul);
+  outline-offset: 2px;
+}
+
+/* O seletor aparece em 2 lugares: no header (computador) e dentro do
+   menu hambúrguer (celular, onde não cabe ao lado dos logos) */
+.menu-small .seletor-tema {
+  display: none;
+}
+
+/* Links + seletor juntos do lado direito do header.
+   margin-left: auto empurra o bloco para a direita mesmo sem logo (Hub) */
+.cabecalho-direita {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .cabecalho-direita .seletor-tema {
+    display: none;
+  }
+
+  .menu-small .seletor-tema {
+    display: flex;
+    align-self: flex-start; /* do tamanho dos botões, sem esticar */
+    margin-top: 1.5rem;
+  }
+}
+
+/* =====================================================================
+   10. PÁGINA FISIOTERAPIA
+   A página reaproveita as seções Home, Sobre e Contato (mesmas classes).
+   Aqui fica só o aviso das caixas de foto que ainda não têm imagem.
+   ===================================================================== */
+
+/* Texto no meio da caixa cinza (.foto) enquanto a foto não chega */
+.foto-vazia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-family: var(--fonte-condensada);
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cor-texto-apagado);
+}
+
+
+/* =====================================================================
+   11. ANIMAÇÕES
+   Só opacity e transform, que o navegador anima sem recalcular o layout.
+   Quem desativou animações no sistema não vê nenhuma (11.4).
+   ===================================================================== */
+
+/* ----- 11.1 Menu do celular abrindo ----- */
+@keyframes menu-abrir {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- 11.2 Entrada do hero ao abrir a página ----- */
+/* Os itens aparecem subindo, um depois do outro (animation-delay).
+   fill-mode "both": antes de começar, o item já fica no estado "from"
+   (invisível), então não pisca na tela antes da animação. */
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-hero > header > *,
+.home-foto,
+.hub-hero-conteudo > * {
+  animation: surgir 0.6s ease-out both;
+}
+
+.home-hero > header > :nth-child(2),
+.hub-hero-conteudo > :nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.home-hero > header > :nth-child(3),
+.hub-hero-conteudo > :nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.home-hero > header > :nth-child(4),
+.hub-hero-conteudo > :nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.home-foto {
+  animation-delay: 0.15s;
+}
+
+/* ----- 11.3 Seções surgindo ao rolar a página ----- */
+/* animation-timeline: view() liga a animação à rolagem: ela acontece
+   enquanto a seção entra na tela. Navegador sem esse recurso ignora o
+   bloco inteiro (@supports) e mostra as seções normalmente. */
+@supports (animation-timeline: view()) {
+  .pagina:not(#inicio) > * {
+    animation: surgir linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+/* ----- 11.4 Acessibilidade: movimento reduzido ----- */
+/* Pessoas com sensibilidade a movimento ativam "reduzir movimento" no
+   sistema. Para elas, nada se mexe: animações e transições somem. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
