@@ -1,4 +1,4 @@
-# Placeholders e conteúdo fictício: PKZ · One to One
+# Conteúdo fictício dos sites: PKZ · One to One
 
 **Sites analisados**
 - Versão sem agendamento: https://pfe-2026-2-grupo-4-react-sem-agenda-plum.vercel.app/
@@ -6,7 +6,7 @@
 
 **Fonte:** código dos repositórios `PFE-2026-2-Grupo-4-react-semAgendamento` e `PFE-2026-2-Grupo-4-react` (os sites são SPAs em React e só renderizam com JavaScript).
 
-> As duas versões usam **os mesmos** contatos, redes sociais e planos. A única diferença está no fluxo de agendamento (seção 5).
+> As duas versões usam **os mesmos** contatos, redes sociais e planos. A única diferença está no fluxo de agendamento (seção 6).
 
 ---
 
@@ -62,7 +62,53 @@ Também em `Planos.jsx`, com textos genéricos de exemplo:
 
 ---
 
-## 3. Outros pontos que provavelmente são placeholder
+## 3. Imagens (fictícias)
+
+Todas as fotos dos sites são fictícias e precisam ser trocadas por fotos reais do cliente. Os logos (`logo-playmakerz.png` e `logo-one-to-one.png`) não entram nesta lista.
+
+### Hub (página inicial `/`)
+| Arquivo | Onde aparece | Descrição (alt) |
+|---|---|---|
+| `hub/hub-hero.webp` | Slider do hero | Atleta jovem e atleta adulto treinando lado a lado |
+| `hub/hub-pkz.webp` | Slider do hero + card "Playmakerz" | Jovens atletas da Playmakerz em treino de agilidade |
+| `hub/hub-oto.webp` | Slider do hero + card "One to One" | Aluna do One to One treinando com kettlebell |
+| `hub/hub-fisio.webp` | Card "Fisioterapia" | Fisioterapeuta tratando o joelho de um atleta na maca |
+| `hub/hub-video-principal.webp` | Slider do hero + foto grande de "Em fotos" | Um dia de treino no centro de treinamento |
+| `hub/hub-video-pkz.webp` | "Em fotos": Preparação de atletas | Jovens atletas alongando antes do treino |
+| `hub/hub-video-oto.webp` | "Em fotos": Treino individual | Aluna fazendo afundo com kettlebells |
+| `hub/hub-video-bastidores.webp` | "Em fotos": Bastidores | Treinadores montando os equipamentos antes da aula |
+
+### Play Makerz (`/pkz`)
+| Arquivo | Onde aparece | Descrição (alt) |
+|---|---|---|
+| `pkz/pkz-hero.webp` | Hero | Jovem atleta correndo na escada de agilidade |
+| `pkz/pkz-equipe.webp` | Sobre nós | Equipe de treinadores no espaço de treino |
+| `pkz/pkz-galeria-1.webp` | Galeria | Atleta saltando no box durante o treino |
+| `pkz/pkz-galeria-2.webp` | Galeria | Cones e escada de agilidade prontos para o treino |
+| `pkz/pkz-galeria-video.webp` | Galeria | Jovem atleta driblando a bola de basquete |
+| `pkz/pkz-galeria-4.webp` | Galeria | Escada de agilidade e barreiras no piso de treino |
+
+### One to One (`/one-to-one`)
+| Arquivo | Onde aparece | Descrição (alt) |
+|---|---|---|
+| `oto/oto-hero.webp` | Hero | Aluno fazendo agachamento com barra |
+| `oto/oto-equipe.webp` | Sobre nós | Equipe de personal trainers no estúdio |
+| `oto/oto-galeria-1.webp` | Galeria | Aluna segurando um kettlebell durante o treino |
+| `oto/oto-galeria-2.webp` | Galeria | Personal trainer anotando a evolução do aluno |
+| `oto/oto-galeria-video.webp` | Galeria | Aluno treinando com cordas navais |
+| `oto/oto-galeria-4.webp` | Galeria | Personal trainer acompanhando o treino pelo celular |
+
+### Fisioterapia (`/fisioterapia`)
+| Arquivo | Onde aparece | Descrição (alt) |
+|---|---|---|
+| `fisio/fisio-hero.webp` | Hero | Fisioterapeuta tratando o joelho de um atleta na maca |
+| `fisio/fisio-equipe.webp` | Sobre nós | Equipe de fisioterapeutas na área de reabilitação |
+
+Todos os arquivos ficam em `src/assets/`. O mesmo conjunto de imagens é usado nas duas versões do site.
+
+---
+
+## 4. Outros pontos que provavelmente são placeholder
 
 | Item | Onde | Observação |
 |---|---|---|
@@ -70,19 +116,18 @@ Também em `Planos.jsx`, com textos genéricos de exemplo:
 | "Respondemos em horário comercial" | Contato das três marcas | Texto genérico |
 | Nome "Unidade 1" | Unidades da PKZ | A One to One usa "Unidade 1 - Armando Lombardi". O endereço (Av. Armando Lombardi, 949, Loja G) é real, de acordo com o Documento de Visão |
 | Unidades Vogue Square e Oasis | Ausentes | O Documento de Visão prevê as duas para a próxima fase |
-| Fotos (hero, equipe, galeria, Hub) | `src/assets/pkz`, `oto`, `fisio`, `hub` | Confirmar se são do cliente ou imagens de exemplo. A Fisioterapia ainda tem o fallback "Foto em breve" no código |
 | Logo da Fisioterapia | Hub (`HubEscolha.jsx`) | Não existe ainda: o card mostra o nome escrito |
 | Copyright "© 2026 PKZ · One to One Studio" | Rodapés | Sem CNPJ ou razão social |
 
 ---
 
-## 4. Dados que são reais (não mexer)
+## 5. Dados que são reais (não mexer)
 - WhatsApp da One to One: (21) 97106-7347
 - Endereço: Av. Armando Lombardi, 949, Loja G, Barra da Tijuca, Rio de Janeiro, RJ, CEP 22640-020 (e o mapa do Google embutido)
 
 ---
 
-## 5. Diferença entre as duas versões
+## 6. Diferença entre as duas versões
 
 | | Sem agendamento | Com agendamento |
 |---|---|---|
@@ -102,6 +147,6 @@ Também em `Planos.jsx`, com textos genéricos de exemplo:
 - [ ] Planos reais da PKZ (nomes e itens)
 - [ ] Planos reais da One to One (nomes e itens)
 - [ ] Horário de atendimento real
-- [ ] Fotos do cliente (se as atuais forem de exemplo)
+- [ ] Trocar as 22 fotos fictícias por fotos reais do cliente
 - [ ] Logo da Fisioterapia
 - [ ] (Versão com agendamento) integração real da agenda
